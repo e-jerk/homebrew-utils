@@ -1,6 +1,6 @@
 # GPU-Accelerated Unix Utilities
 
-Drop-in replacements for `find`, `grep`, and `sed` with GPU acceleration via Metal (macOS) and Vulkan (Linux/cross-platform).
+Drop-in replacements for `find`, `gawk`, `grep`, and `sed` with GPU acceleration via Metal (macOS) and Vulkan (Linux/cross-platform).
 
 ## Installation
 
@@ -15,6 +15,7 @@ brew install e-jerk/utils/gpu-utils
 
 # Or install individually
 brew install e-jerk/utils/find
+brew install e-jerk/utils/gawk
 brew install e-jerk/utils/grep
 brew install e-jerk/utils/sed
 ```
@@ -26,6 +27,7 @@ Images are available on GitHub Container Registry:
 ```bash
 # Pull images
 docker pull ghcr.io/e-jerk/find:latest
+docker pull ghcr.io/e-jerk/gawk:latest
 docker pull ghcr.io/e-jerk/grep:latest
 docker pull ghcr.io/e-jerk/sed:latest
 ```
@@ -36,6 +38,7 @@ All utilities work as drop-in replacements with automatic backend selection:
 
 ```bash
 find . -name "*.txt"
+gawk '/pattern/' file.txt
 grep "error" server.log
 sed 's/foo/bar/g' config.txt
 ```
@@ -44,6 +47,7 @@ Pipe data through stdin:
 
 ```bash
 cat largefile.txt | grep "pattern"
+cat data.txt | gawk '{print $2}'
 echo "/home /var" | find - -name "*.conf"
 echo "hello world" | sed 's/world/gpu/'
 ```
@@ -52,8 +56,128 @@ Force GPU acceleration with `--gpu` or use `--cpu` for comparison:
 
 ```bash
 grep --gpu "pattern" largefile.log
+gawk --gpu '/pattern/' largefile.txt
 sed --cpu 's/old/new/g' file.txt
 ```
+
+---
+
+## gawk
+
+GPU-accelerated AWK text processor with parallel pattern matching and field extraction.
+
+### Usage
+
+```
+Usage: gawk [OPTION]... 'PROGRAM' [FILE]...
+Process text using AWK patterns and actions.
+If no FILE is given, read standard input.
+Example: gawk '/error/ {print $1, $3}' server.log
+
+Pattern matching:
+  /PATTERN/             match lines containing PATTERN
+  !/PATTERN/            match lines NOT containing PATTERN
+  -i, --ignore-case     ignore case distinctions in patterns
+  -v, --invert-match    select non-matching lines
+
+Field processing:
+  -F, --field-separator=SEP  use SEP as field separator (default: whitespace)
+  {print $N}            print field N (1-indexed)
+  {print $1, $3}        print multiple fields
+
+Built-in functions:
+  length($N)            return length of field N
+  substr($N, s, l)      substring starting at s with length l
+  substr($N, s)         substring from s to end
+  index($N, "str")      position of str in field (1-indexed)
+  toupper($N)           convert to uppercase
+  tolower($N)           convert to lowercase
+
+Special variables:
+  NR                    current line number
+  NF                    number of fields in current line
+
+Output control:
+  -V, --verbose         print backend and timing information
+
+GPU Backend selection:
+  --auto                auto-select optimal backend (default)
+  --gpu                 force GPU (Metal on macOS, Vulkan on Linux)
+  --cpu                 force CPU backend
+  --gnu                 force GNU gawk backend
+  --metal               force Metal backend (macOS only)
+  --vulkan              force Vulkan backend
+
+Miscellaneous:
+  -h, --help            display this help text and exit
+      --version         display version information and exit
+
+When FILE is '-', read standard input. With no FILE, read standard input.
+```
+
+### Examples
+
+```bash
+# Print lines matching pattern
+gawk '/error/' server.log
+
+# Print specific field
+gawk '{print $2}' data.txt
+
+# Pattern with field extraction
+gawk '/error/ {print $1, $3}' server.log
+
+# Custom field separator
+gawk -F: '{print $1}' /etc/passwd
+
+# Case-insensitive matching
+gawk -i '/ERROR/' log.txt
+
+# Built-in functions
+gawk '{print length($1)}' file.txt
+gawk '{print substr($1, 1, 3)}' file.txt
+gawk '{print toupper($1)}' file.txt
+
+# Special variables
+gawk '{print NR, $0}' file.txt    # Line numbers
+gawk '{print NF}' file.txt        # Field count
+
+# Force GPU acceleration
+gawk --gpu '/pattern/' largefile.txt
+
+# Read from stdin
+cat file.txt | gawk '{print $2}'
+```
+
+### Docker
+
+```bash
+# Process a file
+docker run --rm -v "$(pwd):/data" \
+    ghcr.io/e-jerk/gawk '/pattern/' /data/file.txt
+
+# Extract fields with custom separator
+docker run --rm -v "$(pwd):/data" \
+    ghcr.io/e-jerk/gawk -F: '{print $1}' /data/passwd
+
+# Read from stdin
+cat data.txt | docker run --rm -i \
+    ghcr.io/e-jerk/gawk '{print $2}'
+
+# GPU-accelerated processing (Linux)
+docker run --rm -v "$(pwd):/data" --device /dev/dri \
+    ghcr.io/e-jerk/gawk --gpu '/error/' /data/server.log
+```
+
+### Performance
+
+| Operation | Speedup |
+|-----------|---------|
+| Regex patterns (`/[0-9]+/`) | ~1,500x |
+| Pattern matching (`/error/`) | ~15x |
+| Field extraction (`{print $2}`) | ~8x |
+| Case-insensitive (`-i`) | ~6x |
+| Built-in functions | ~8x |
 
 ---
 
@@ -419,6 +543,7 @@ zig build -Doptimize=ReleaseFast
 
 See individual repositories for detailed build and test instructions:
 - [find](https://github.com/e-jerk/find)
+- [gawk](https://github.com/e-jerk/gawk)
 - [grep](https://github.com/e-jerk/grep)
 - [sed](https://github.com/e-jerk/sed)
 
