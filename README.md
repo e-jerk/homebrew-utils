@@ -2,6 +2,17 @@
 
 Drop-in replacements for `find`, `gawk`, `grep`, and `sed` with GPU acceleration via Metal (macOS) and Vulkan (Linux/cross-platform).
 
+## Build Variants
+
+Each utility is available in two variants:
+
+| Variant | Description | Dependencies | `--gnu` flag |
+|---------|-------------|--------------|--------------|
+| **pure** | Zig + SIMD + GPU only | None | Not available |
+| **gnu** | Includes GNU utilities for full POSIX compliance | GNU coreutils | Falls back to GNU implementation |
+
+The **pure** build is self-contained with no external dependencies. The **gnu** build includes GNU utilities for features not yet implemented natively (e.g., backreferences in sed, `-exec` in find).
+
 ## Installation
 
 ### Homebrew
@@ -10,11 +21,15 @@ Drop-in replacements for `find`, `gawk`, `grep`, and `sed` with GPU acceleration
 # Add the tap
 brew tap e-jerk/utils
 
-# Install all utilities
+# Install pure builds (default, no dependencies)
 brew install e-jerk/utils/gpu-utils
 
+# Install gnu builds (includes GNU fallback)
+brew install e-jerk/utils/gpu-utils-gnu
+
 # Or install individually
-brew install e-jerk/utils/find
+brew install e-jerk/utils/find           # pure build
+brew install e-jerk/utils/find-gnu       # gnu build
 brew install e-jerk/utils/gawk
 brew install e-jerk/utils/grep
 brew install e-jerk/utils/sed
@@ -489,19 +504,32 @@ docker run --rm -v "$(pwd):/data" --device /dev/dri \
 
 All utilities support the same backend flags:
 
-| Flag | Description |
-|------|-------------|
-| `--auto` | Automatically select optimal backend (default) |
-| `--gpu` | Use GPU (Metal on macOS, Vulkan elsewhere) |
-| `--cpu` | Force CPU backend |
-| `--metal` | Force Metal backend (macOS only) |
-| `--vulkan` | Force Vulkan backend |
-| `-V, --verbose` | Show timing and backend information |
+| Flag | Description | Build |
+|------|-------------|-------|
+| `--auto` | Automatically select optimal backend (default) | Both |
+| `--gpu` | Use GPU (Metal on macOS, Vulkan elsewhere) | Both |
+| `--cpu` | Force CPU backend (SIMD-optimized) | Both |
+| `--gnu` | Force GNU implementation (full POSIX compliance) | **gnu only** |
+| `--metal` | Force Metal backend (macOS only) | Both |
+| `--vulkan` | Force Vulkan backend | Both |
+| `-V, --verbose` | Show timing and backend information | Both |
+
+### Optimization Annotations
+
+Each flag in `--help` output shows its optimization status:
+
+| Annotation | Description |
+|------------|-------------|
+| `[GPU+SIMD]` | GPU-accelerated (Metal/Vulkan) + SIMD-optimized CPU fallback |
+| `[SIMD]` | SIMD-optimized CPU only (GPU implementation pending) |
+| `[CPU]` | CPU-only (requires filesystem syscalls or complex logic) |
+
+### Auto-Selection Algorithm
 
 The auto-selection algorithm considers:
 - Input size (larger inputs benefit more from GPU)
-- Pattern complexity
-- Available hardware
+- Pattern complexity (regex vs. fixed strings)
+- Available hardware (GPU tier classification)
 - Transfer overhead vs. computation time
 
 ## Requirements
