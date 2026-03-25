@@ -17,22 +17,27 @@ The **pure** build is self-contained with no external dependencies. The **gnu** 
 
 ### Homebrew
 
+This tap provides **pure GPU versions** of the utilities with no external dependencies.
+
 ```bash
 # Add the tap
 brew tap e-jerk/utils
 
-# Install pure builds (default, no dependencies)
-brew install e-jerk/utils/gpu-utils
-
-# Install gnu builds (includes GNU fallback)
-brew install e-jerk/utils/gpu-utils-gnu
+# Install all utilities at once
+brew install e-jerk/utils/utils
 
 # Or install individually
-brew install e-jerk/utils/find           # pure build
-brew install e-jerk/utils/find-gnu       # gnu build
+brew install e-jerk/utils/find
 brew install e-jerk/utils/gawk
 brew install e-jerk/utils/grep
 brew install e-jerk/utils/sed
+```
+
+For GNU-fallback versions (includes GNU utilities for full POSIX compliance), use the [e-jerk/utils-gnu](https://github.com/e-jerk/homebrew-utils-gnu) tap instead:
+
+```bash
+brew tap e-jerk/utils-gnu
+brew install e-jerk/utils-gnu/utils-gnu
 ```
 
 ### Docker
@@ -551,10 +556,11 @@ The auto-selection algorithm considers:
 
 ```bash
 # Upgrade all utilities
-brew upgrade e-jerk/utils/gpu-utils
+brew upgrade e-jerk/utils/utils
 
 # Upgrade individually
 brew upgrade e-jerk/utils/find
+brew upgrade e-jerk/utils/gawk
 brew upgrade e-jerk/utils/grep
 brew upgrade e-jerk/utils/sed
 ```
