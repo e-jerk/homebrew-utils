@@ -7,18 +7,18 @@ class Sed < Formula
   on_macos do
     on_arm do
       url "https://github.com/e-jerk/sed/releases/download/v#{version}/sed-macos-arm64-v#{version}.tar.gz"
-      sha256 "be003159083f51b7795322d170fda17dba5c36dc92337410a9c7f1c1b554bff1" # macos-arm64
+      sha256 "0fc4081fa308ebe24a84ea981424b15111c68ecd79553671cb94b0ef05ea89bf" # macos-arm64
     end
   end
 
   on_linux do
     on_arm do
       url "https://github.com/e-jerk/sed/releases/download/v#{version}/sed-linux-arm64-v#{version}.tar.gz"
-      sha256 "856a18ff3a1c89710bee301dfc9cd4b9866b65f69ca978dce95ff052b7942b6a" # linux-arm64
+      sha256 "9d71b69c00df2772962f0055b523577402d8ad2019776cb3cd08c4bc63454de7" # linux-arm64
     end
     on_intel do
       url "https://github.com/e-jerk/sed/releases/download/v#{version}/sed-linux-amd64-v#{version}.tar.gz"
-      sha256 "d07e0099a711c809952e885bc59b08a166cd5e1b6a707e2ff5f1cf3f8e601492" # linux-amd64
+      sha256 "aff0c3ad41b50d10326b4671b52f31a1de1c8d034b1c9081bcb18e8f5e2ebfd7" # linux-amd64
     end
     depends_on "vulkan-loader"
   end
