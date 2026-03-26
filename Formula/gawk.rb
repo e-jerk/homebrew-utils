@@ -27,6 +27,14 @@ class Gawk < Formula
     bin.install "gawk"
   end
 
+  def caveats
+    <<~EOS
+      macOS does not include gawk by default. This installs 'gawk' to #{bin}/gawk.
+      If you also have GNU awk installed elsewhere, ensure Homebrew bin is first:
+        export PATH="$(brew --prefix)/bin:$PATH"
+    EOS
+  end
+
   test do
     system "#{bin}/gawk", "--help"
   end

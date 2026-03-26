@@ -27,6 +27,14 @@ class Find < Formula
     bin.install "find"
   end
 
+  def caveats
+    <<~EOS
+      On macOS, Apple's /usr/bin/find takes precedence over Homebrew.
+      To use this version by default, ensure Homebrew bin is first in PATH:
+        export PATH="$(brew --prefix)/bin:$PATH"
+    EOS
+  end
+
   test do
     system "#{bin}/find", "--help"
   end

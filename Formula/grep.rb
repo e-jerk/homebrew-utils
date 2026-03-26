@@ -27,6 +27,17 @@ class Grep < Formula
     bin.install "grep"
   end
 
+  def caveats
+    s = <<~EOS
+      This installs 'grep' to #{bin}/grep.
+      On macOS, Apple's /usr/bin/grep may take precedence.
+
+      To use this version by default, ensure it's first in PATH:
+        export PATH="$(brew --prefix)/bin:$PATH"
+    EOS
+    s
+  end
+
   test do
     system "#{bin}/grep", "--help"
   end
