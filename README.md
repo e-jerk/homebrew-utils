@@ -2,22 +2,11 @@
 
 Drop-in replacements for `find`, `gawk`, `grep`, and `sed` with GPU acceleration via Metal (macOS) and Vulkan (Linux/cross-platform).
 
-## Build Variants
-
-Each utility is available in two variants:
-
-| Variant | Description | Dependencies | `--gnu` flag |
-|---------|-------------|--------------|--------------|
-| **pure** | Zig + SIMD + GPU only | None | Not available |
-| **gnu** | Includes GNU utilities for full POSIX compliance | GNU coreutils | Falls back to GNU implementation |
-
-The **pure** build is self-contained with no external dependencies. The **gnu** build includes GNU utilities for features not yet implemented natively (e.g., backreferences in sed, `-exec` in find).
-
 ## Installation
 
-### Homebrew
+### Homebrew (Pure Builds)
 
-This tap provides **pure GPU versions** of the utilities with no external dependencies.
+This tap provides **pure GPU versions** with no external dependencies.
 
 ```bash
 # Add the tap
@@ -33,19 +22,29 @@ brew install e-jerk/utils/grep
 brew install e-jerk/utils/sed
 ```
 
-For GNU-fallback versions (includes GNU utilities for full POSIX compliance), use the [e-jerk/utils-gnu](https://github.com/e-jerk/homebrew-utils-gnu) tap instead:
+For GNU-fallback versions, use the [e-jerk/utils-gnu](https://github.com/e-jerk/homebrew-utils-gnu) tap:
 
 ```bash
 brew tap e-jerk/utils-gnu
 brew install e-jerk/utils-gnu/utils-gnu
 ```
 
-### Docker
+### macOS PATH Override
 
-Images are available on GitHub Container Registry:
+macOS ships `/usr/bin/sed`, `/usr/bin/find`, and `/usr/bin/grep` from Apple. To use the e-jerk versions by default, ensure Homebrew's bin comes first in your PATH:
 
 ```bash
-# Pull images
+echo 'export PATH="$(brew --prefix)/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
+
+# Verify
+which sed   # should show /opt/homebrew/bin/sed
+which grep  # should show /opt/homebrew/bin/grep
+```
+
+### Docker
+
+```bash
 docker pull ghcr.io/e-jerk/find:latest
 docker pull ghcr.io/e-jerk/gawk:latest
 docker pull ghcr.io/e-jerk/grep:latest
