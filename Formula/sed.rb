@@ -1,24 +1,24 @@
 class Sed < Formula
   desc "GPU-accelerated sed utility (Metal on macOS, Vulkan on Linux)"
   homepage "https://github.com/e-jerk/sed"
-  version "0.2.0"
+  version "0.4.0"
   license "Unlicense"
 
   on_macos do
     on_arm do
       url "https://github.com/e-jerk/sed/releases/download/v#{version}/sed-macos-arm64-v#{version}.tar.gz"
-      sha256 "0fc4081fa308ebe24a84ea981424b15111c68ecd79553671cb94b0ef05ea89bf" # macos-arm64
+      sha256 "cf232fcbb0c5723d59d3c443a742eb26140e9f4a5a5e6cfa15af73c06d3a5ded" # macos-arm64
     end
   end
 
   on_linux do
     on_arm do
       url "https://github.com/e-jerk/sed/releases/download/v#{version}/sed-linux-arm64-v#{version}.tar.gz"
-      sha256 "9d71b69c00df2772962f0055b523577402d8ad2019776cb3cd08c4bc63454de7" # linux-arm64
+      sha256 "434db2efc6a912b631eb98aeb3f4a9b5b9341f8ade4b34e3868547e699d4dcbc" # linux-arm64
     end
     on_intel do
       url "https://github.com/e-jerk/sed/releases/download/v#{version}/sed-linux-amd64-v#{version}.tar.gz"
-      sha256 "aff0c3ad41b50d10326b4671b52f31a1de1c8d034b1c9081bcb18e8f5e2ebfd7" # linux-amd64
+      sha256 "cf59f89b54d7057cf3d5ea25774d774d4e656228c3c4157634526c9039451592" # linux-amd64
     end
     depends_on "vulkan-loader"
   end
