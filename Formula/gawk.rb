@@ -7,18 +7,18 @@ class Gawk < Formula
   on_macos do
     on_arm do
       url "https://github.com/e-jerk/gawk/releases/download/v#{version}/gawk-macos-arm64-v#{version}.tar.gz"
-      sha256 "3185c787cb4f6d5548b45081bf4550633cddfbaf12cf89ea9b0ea7fc9e9c9a51" # macos-arm64
+      sha256 "9df25c289e38c7457fae5fee6dc14efc30123c7a97f76681844a9bb534e3fed0" # macos-arm64
     end
   end
 
   on_linux do
     on_arm do
       url "https://github.com/e-jerk/gawk/releases/download/v#{version}/gawk-linux-arm64-v#{version}.tar.gz"
-      sha256 "56603e82b7fb47abf071be6778c916984d9d60fb2029e6e5496e011a2144b90e" # linux-arm64
+      sha256 "d9065006fe553e72810887cb0f3983f19561e447727643f1024aba60b1986989" # linux-arm64
     end
     on_intel do
       url "https://github.com/e-jerk/gawk/releases/download/v#{version}/gawk-linux-amd64-v#{version}.tar.gz"
-      sha256 "926a44a96c1fd3a3271d4d140a2fddd532ed8f8f92e46850d8644d800007cf19" # linux-amd64
+      sha256 "f0958435591a4aab5a1b392ea144716ffa8579b4a7c03b703eb40d900fb867ed" # linux-amd64
     end
     depends_on "vulkan-loader"
   end
