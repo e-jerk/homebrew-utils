@@ -7,18 +7,18 @@ class Grep < Formula
   on_macos do
     on_arm do
       url "https://github.com/e-jerk/grep/releases/download/v#{version}/grep-macos-arm64-v#{version}.tar.gz"
-      sha256 "f1914490efe5bffe45da7dd1317ed07985925f6eb42a8ff6cd8f9f2c346ccb82" # macos-arm64
+      sha256 "fa25a438816857b7ec7e4eb97dd18fd76052270ebf32938ea06bf2d27e07a1ed" # macos-arm64
     end
   end
 
   on_linux do
     on_arm do
       url "https://github.com/e-jerk/grep/releases/download/v#{version}/grep-linux-arm64-v#{version}.tar.gz"
-      sha256 "e007771670f6a79753adaea42a72bdff2453d250259fe3fac88be4cf790dcecc" # linux-arm64
+      sha256 "0ed6cd7180b30608081f9e780bcc2a52ba285c1e1fb07b9159ed4bbd56d6a589" # linux-arm64
     end
     on_intel do
       url "https://github.com/e-jerk/grep/releases/download/v#{version}/grep-linux-amd64-v#{version}.tar.gz"
-      sha256 "898cc44fb70798c2cbdc9dd0497efc5c2859d5fa8f350b3a487231cf34cd2b53" # linux-amd64
+      sha256 "a37f16022d299b4f17742ac74964622f38679d2f7e3592491bb39b064d99e7ef" # linux-amd64
     end
     depends_on "vulkan-loader"
   end
